@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>User Dashboard - Menarco</title>
+  <style>
+    body { font-family: 'Poppins', sans-serif; background: #f9f9f9; padding: 30px; }
+    .container { max-width: 600px; margin: auto; background: white; padding: 30px; border-radius: 12px; }
+    h1 { margin-bottom: 20px; }
+    form textarea, form button { width: 100%; padding: 12px; margin: 12px 0; border-radius: 8px; border: 1px solid #ccc; }
+    button { background: #5d8aa8; color: white; border: none; cursor: pointer; font-weight: 600; }
+    button:hover { background: #466f89; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+    th { background: #5d8aa8; color: white; }
+    .message { background: #d4edda; color: #155724; padding: 12px; border-radius: 8px; margin-bottom: 20px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Welcome, {{ username }}!</h1>
+
+    {% if message %}
+      <div class="message">{{ message }}</div>
+    {% endif %}
+
+    <form method="POST">
+      <label for="purpose">Purpose of Visit:</label>
+      <textarea id="purpose" name="purpose" placeholder="Why are you visiting?" required></textarea>
+      <button type="submit">Check In</button>
+    </form>
+
+    <h2>Your Visit History</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Purpose</th>
+          <th>Check-In</th>
+          <th>Check-Out</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for visit in visits %}
+        <tr>
+          <td>{{ visit[0] }}</td>
+          <td>{{ visit[1] }}</td>
+          <td>{{ visit[2] }}</td>
+          <td>{{ visit[3] or '-' }}</td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="4" style="text-align:center; font-style: italic;">No visits yet.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <p><a href="{{ url_for('logout') }}">Logout</a></p>
+  </div>
+</body>
+</html>

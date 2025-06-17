@@ -1,0 +1,17 @@
+{% extends 'base_visitor.html' %}
+ {% include 'visitor_sidebar.html' %}
+{% block content %}
+  <h1>Visitor Entry Form</h1>
+  <form method="POST">
+    <label>Purpose of Visit:</label>
+    <input type="text" name="purpose" required><br><br>
+
+    <label>Date of Visit:</label>
+    <input type="date" name="visit_date" required><br><br>
+
+    <label>Time In:</label>
+    <input type="time" name="time_in" required><br><br>
+    
+    <button type="submit">Submit</button>
+  </form>
+{% endblock %}

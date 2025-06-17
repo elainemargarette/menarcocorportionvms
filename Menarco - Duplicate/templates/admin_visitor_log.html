@@ -1,0 +1,27 @@
+{% extends "admin_base.html" %}
+
+{% block content %}
+  <h1>Visitor Log</h1>
+  <table border="1" style="width: 100%; border-collapse: collapse;">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Purpose</th>
+        <th>Contact</th>
+        <th>Check-In Time</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for visitor in visitors %}
+      <tr>
+        <td>{{ visitor[0] }}</td>
+        <td>{{ visitor[1] }}</td>
+        <td>{{ visitor[2] }}</td>
+        <td>{{ visitor[3] }}</td>
+        <td>{{ visitor[4] }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

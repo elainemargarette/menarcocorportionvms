@@ -1,0 +1,22 @@
+{% extends 'base_visitor.html' %}
+
+{% block content %}
+  <h1>Visitor Profile</h1>
+  <p>Here is your personal profile information.</p>
+{% endblock %}
+
+ {% include 'visitor_sidebar.html' %}
+<!-- templates/visitor_profile.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Visitor Profile</title>
+</head>
+<body>
+  <h1>Visitor Profile</h1>
+  <p>Welcome, {{ session.username }}!</p>
+  <a href="{{ url_for('visitor_dashboard') }}">Back to Dashboard</a>
+  <a href="{{ url_for('logout') }}">Logout</a>
+</body>
+</html>
