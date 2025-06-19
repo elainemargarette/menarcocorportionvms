@@ -186,50 +186,32 @@ def login():
 
 @app.route("/visitor_dashboard", methods=["GET", "POST"])
 def visitor_dashboard():
-    if session.get("role") != "visitor":
-        return redirect(url_for("login"))
-
-    username = session["username"]
-
     if request.method == "POST":
+        visitor_name = request.form.get("visitor_name", "").strip()
         purpose = request.form.get("purpose", "").strip()
-        if not purpose:
-            flash("Purpose is required for check-in.", "error")
+        if not visitor_name or not purpose:
+            flash("Name and purpose are required for check-in.", "error")
         else:
             check_in_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
             try:
                 with get_db_connection() as conn:
                     conn.execute(
                         "INSERT INTO visits (username, purpose, check_in_time) VALUES (?, ?, ?)",
-                        (username, purpose, check_in_time),
+                        (visitor_name, purpose, check_in_time),
                     )
                     conn.commit()
                 flash(f"Check-in successful at {check_in_time}", "success")
-            except sqlite3.Error as e:
+            except sqlite3.Error:
                 flash("Error during check-in. Please try again.", "error")
-
-        # Redirect to prevent form resubmission on refresh
         return redirect(url_for("visitor_dashboard"))
 
-    # GET request - fetch user's visit history
-    try:
-        with get_db_connection() as conn:
-            visits = conn.execute(
-                "SELECT id, purpose, check_in_time, check_out_time FROM visits WHERE username = ? ORDER BY check_in_time DESC",
-                (username,),
-            ).fetchall()
-    except sqlite3.Error:
-        visits = []
-        flash("Error loading visit history.", "error")
-
-    return render_template("visitor_dashboard.html", username=username, visits=visits)
+    # For GET, simply render the visitor form (no login check)
+    return render_template("visitor_dashboard.html")
 
 
 @app.route("/visitor-form")
 def visitor_form():
-    if session.get("role") != "visitor":
-        return redirect(url_for("login"))
+    # Remove session check so anyone can access the form.
     return render_template("visitor_form.html")
 
 
@@ -391,6 +373,10 @@ def calculate_duration(check_in_str, check_out_str):
             return f"{minutes}m"
     except:
         return "N/A"
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
 
 
 # Add the function to template context

@@ -1,187 +1,191 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Menarco Development - Home</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Poppins', sans-serif;
-    }
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Menarco Development - Home</title>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
+            rel="stylesheet"
+        />
+        <style>
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+                font-family: "Poppins", sans-serif;
+            }
 
-    body {
-      background: #f9f9f9;
-      color: #333;
-    }
+            body {
+                background: #f9f9f9;
+                color: #333;
+            }
 
-    header {
-      background-color: #639399;
-      padding: 10px 25px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    }
+            header {
+                background-color: #639399;
+                padding: 10px 25px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            }
 
-    .logo {
-      font-size: 1.4rem;
-      font-weight: 600;
-      color: #fff;
-    }
+            .logo {
+                font-size: 1.4rem;
+                font-weight: 600;
+                color: #fff;
+            }
 
-    .logo img {
-      height: 30px; 
-      vertical-align: middle;
-      margin-right: 8px;
-    }
+            .logo img {
+                height: 30px;
+                vertical-align: middle;
+                margin-right: 8px;
+            }
 
-    nav a {
-      color: #fff;
-      text-decoration: none;
-      font-weight: 400;
-      margin-left: 15px;
-      padding: 6px 12px;
-      border: 1px solid transparent;
-      border-radius: 6px;
-      transition: all 0.3s ease;
-      font-size: 0.7rem;
-    }
+            nav a {
+                color: #fff;
+                text-decoration: none;
+                font-weight: 400;
+                margin-left: 15px;
+                padding: 6px 12px;
+                border: 1px solid transparent;
+                border-radius: 6px;
+                transition: all 0.3s ease;
+                font-size: 0.7rem;
+            }
 
-    nav a:hover {
-      background-color: #fff;
-      color: #5d8aa8;
-      border-color: #fff;
-    }
+            nav a:hover {
+                background-color: #fff;
+                color: #5d8aa8;
+                border-color: #fff;
+            }
 
-    nav a.admin-link {
-      font-size: 0.65rem;
-      opacity: 0.7;
-    }
+            nav a.admin-link {
+                font-size: 0.65rem;
+                opacity: 0.7;
+            }
 
-    .hero {
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      padding: 180px 20px;
-      color: white;
-      z-index: 1;
-    }
+            .hero {
+                position: relative;
+                overflow: hidden;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                padding: 180px 20px;
+                color: white;
+                z-index: 1;
+            }
 
-    .hero-background {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -2;
-      background: url('/static/images/bg.jpg') no-repeat center center;
-      background-size: cover;
-      animation: zoomPan 20s ease-in-out infinite;
-    }
+            .hero-background {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                z-index: -2;
+                background: url("/static/images/bg.jpg") no-repeat center center;
+                background-size: cover;
+                animation: zoomPan 20s ease-in-out infinite;
+            }
 
-    .hero-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-      background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4));
-    }
+            .hero-overlay {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                z-index: -1;
+                background: linear-gradient(
+                    rgba(0, 0, 0, 0.4),
+                    rgba(0, 0, 0, 0.4)
+                );
+            }
 
-    @keyframes zoomPan {
-      0% {
-        transform: scale(1) translate(0, 0);
-      }
-      50% {
-        transform: scale(1.05) translate(-1%, -1%);
-      }
-      100% {
-        transform: scale(1) translate(0, 0);
-      }
-    }
+            @keyframes zoomPan {
+                0% {
+                    transform: scale(1) translate(0, 0);
+                }
+                50% {
+                    transform: scale(1.05) translate(-1%, -1%);
+                }
+                100% {
+                    transform: scale(1) translate(0, 0);
+                }
+            }
 
-    .hero h1 {
-      font-size: 3rem;
-      margin-bottom: 20px;
-      text-shadow: 1px 2px 8px rgba(0,0,0,0.3);
-      animation: fadeSlideUp 1.2s ease-out forwards;
-    }
+            .hero h1 {
+                font-size: 3rem;
+                margin-bottom: 20px;
+                text-shadow: 1px 2px 8px rgba(0, 0, 0, 0.3);
+                animation: fadeSlideUp 1.2s ease-out forwards;
+            }
 
-    .hero p {
-      font-size: 1.1rem;
-      max-width: 600px;
-      margin-bottom: 20px;
-      text-shadow: 1px 2px 6px rgba(0,0,0,0.3);
-      animation: fadeSlideUp 1.4s ease-out forwards;
-    }
+            .hero p {
+                font-size: 1.1rem;
+                max-width: 600px;
+                margin-bottom: 20px;
+                text-shadow: 1px 2px 6px rgba(0, 0, 0, 0.3);
+                animation: fadeSlideUp 1.4s ease-out forwards;
+            }
 
-    .hero a.button {
-      background-color: #ffffff;
-      color: #5d8aa8;
-      padding: 12px 20px;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 1rem;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-      animation: fadeSlideUp 1.6s ease-out forwards;
-    }
+            .hero a.button {
+                background-color: #ffffff;
+                color: #5d8aa8;
+                padding: 12px 20px;
+                border-radius: 8px;
+                text-decoration: none;
+                font-weight: 600;
+                font-size: 1rem;
+                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+                animation: fadeSlideUp 1.6s ease-out forwards;
+            }
 
-    .hero a.button:hover {
-      background-color: #e8f0f2;
-    }
+            .hero a.button:hover {
+                background-color: #e8f0f2;
+            }
 
-    @keyframes fadeSlideUp {
-      0% {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
+            @keyframes fadeSlideUp {
+                0% {
+                    opacity: 0;
+                    transform: translateY(30px);
+                }
+                100% {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
 
-    footer {
-      margin-top: 10px;
-      text-align: center;
-      padding: 10px;
-      font-size: 0.75rem;
-      color: #777;
-    }
-  </style>
-</head>
-<body>
+            footer {
+                margin-top: 10px;
+                text-align: center;
+                padding: 10px;
+                font-size: 0.75rem;
+                color: #777;
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <div class="logo">
+                <img src="/static/images/logo.png" alt="Menarco Logo" />
+            </div>
+            <nav>
+                <a href="/login" class="admin-link">Admin Login</a>
+            </nav>
+        </header>
 
-  <header>
-    <div class="logo">
-      <img src="/static/images/logo.png" alt="Menarco Logo">
-    </div>
-    <nav>
-      <a href="/login" class="admin-link">Admin Login</a>
-    </nav>
-  </header>
+        <section class="hero">
+            <div class="hero-background"></div>
+            <div class="hero-overlay"></div>
+            <h1>Menarco Development Corporation</h1>
+            <p>Sign in quickly and easily — no account needed.</p>
+            <a href="/visitor_dashboard" class="button"
+                >Fill Out Visitor Form</a
+            >
+        </section>
 
-  <section class="hero">
-    <div class="hero-background"></div>
-    <div class="hero-overlay"></div>
-    <h1>Menarco Development Corporation</h1>
-    <p>Sign in quickly and easily — no account needed.</p>
-    <a href="/visitor_dashboard.html" class="button">Fill Out Visitor Form</a>
-  </section>
-
-  <footer>
-    &copy; 2025 Menarco Development. All rights reserved.
-  </footer>
-
-</body>
+        <footer>&copy; 2025 Menarco Development. All rights reserved.</footer>
+    </body>
 </html>

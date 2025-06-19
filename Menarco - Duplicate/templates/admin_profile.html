@@ -1,8 +1,0 @@
-{% extends "admin_base.html" %}
-
-{% block content %}
-  <h1>Admin Profile</h1>
-  <p><strong>Username:</strong> {{ session['username'] }}</p>
-  <p><strong>Email:</strong> {{ session['email'] or 'admin@example.com' }}</p>
-  <!-- Add more profile details here -->
-{% endblock %}
