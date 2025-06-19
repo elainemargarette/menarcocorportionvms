@@ -172,6 +172,30 @@
                 font-size: 14px;
             }
 
+            .back-home-btn {
+                display: inline-block;
+                margin-top: 15px;
+                padding: 8px 20px;
+                background: rgba(93, 138, 168, 0.1);
+                color: #5d8aa8;
+                text-decoration: none;
+                border-radius: 25px;
+                font-size: 14px;
+                font-weight: 500;
+                transition: all 0.3s ease;
+                border: 1px solid rgba(93, 138, 168, 0.2);
+            }
+
+            .back-home-btn:hover {
+                background: rgba(93, 138, 168, 0.2);
+                transform: translateY(-1px);
+            }
+
+            .back-home-btn i {
+                margin-right: 5px;
+                font-size: 12px;
+            }
+
             @keyframes slideIn {
                 from {
                     opacity: 0;
@@ -205,6 +229,9 @@
                 <i class="fas fa-building"></i>
                 <h1>Menarco Corporation</h1>
                 <p>Visitor Management System</p>
+                <a href="{{ url_for('home') }}" class="back-home-btn">
+                    <i class="fas fa-home"></i> Back to Homepage
+                </a>
             </div>
 
             {% if message %}
