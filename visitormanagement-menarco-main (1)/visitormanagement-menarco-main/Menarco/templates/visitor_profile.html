@@ -1,0 +1,64 @@
+{% extends 'base_visitor.html' %} {% block content %}
+<div class="profile-container">
+    <h1>Visitor Profile</h1>
+
+    <div class="profile-card">
+        <div class="profile-info">
+            <h2>Personal Information</h2>
+            <div class="info-row">
+                <label>Username:</label>
+                <span>{{ username }}</span>
+            </div>
+            <div class="info-row">
+                <label>Full Name:</label>
+                <span>{{ user_info.name or 'Not provided' }}</span>
+            </div>
+            <div class="info-row">
+                <label>Contact:</label>
+                <span>{{ user_info.contact or 'Not provided' }}</span>
+            </div>
+            <div class="info-row">
+                <label>Address:</label>
+                <span>{{ user_info.address or 'Not provided' }}</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .profile-container {
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .profile-card {
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .profile-info h2 {
+        margin-bottom: 20px;
+        color: #5d8aa8;
+    }
+
+    .info-row {
+        display: flex;
+        margin-bottom: 15px;
+        padding: 10px 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .info-row label {
+        font-weight: 600;
+        width: 120px;
+        color: #333;
+    }
+
+    .info-row span {
+        flex: 1;
+        color: #666;
+    }
+</style>
+{% endblock %}

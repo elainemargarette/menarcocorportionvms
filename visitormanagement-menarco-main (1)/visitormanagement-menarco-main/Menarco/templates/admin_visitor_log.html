@@ -1,0 +1,496 @@
+{% extends "admin_base.html" %} {% block content %}
+<div class="visitor-log-container">
+    <div class="page-header">
+        <h1>Visitor Activity Log</h1>
+        <p class="subtitle">
+            Complete history of all visitor check-ins and check-outs
+        </p>
+    </div>
+
+    {% with messages = get_flashed_messages() %} {% if messages %}
+    <div class="alerts">
+        {% for message in messages %}
+        <div class="alert alert-info">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %} {% endwith %}
+
+    <div class="table-controls">
+        <div class="search-box">
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Search by username, purpose..."
+                onkeyup="filterTable()"
+            />
+            <span class="search-icon">🔍</span>
+        </div>
+        <div class="table-stats">
+            <span class="stat-badge"
+                >Total Records:
+                <strong id="totalRecords">{{ visitors|length }}</strong></span
+            >
+            <span class="stat-badge active-visitors"
+                >Active:
+                <strong
+                    >{{ visitors|selectattr('check_out_time',
+                    'none')|list|length }}</strong
+                ></span
+            >
+        </div>
+    </div>
+
+    <div class="table-wrapper">
+        <table class="visitor-table" id="visitorTable">
+            <thead>
+                <tr>
+                    <th onclick="sortTable(0)">
+                        ID <span class="sort-icon">↕️</span>
+                    </th>
+                    <th onclick="sortTable(1)">
+                        Username <span class="sort-icon">↕️</span>
+                    </th>
+                    <th onclick="sortTable(2)">
+                        Purpose <span class="sort-icon">↕️</span>
+                    </th>
+                    <th onclick="sortTable(3)">
+                        Check-In Time <span class="sort-icon">↕️</span>
+                    </th>
+                    <th onclick="sortTable(4)">
+                        Check-Out Time <span class="sort-icon">↕️</span>
+                    </th>
+                    <th>Status</th>
+                    <th>Duration</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for visitor in visitors %}
+                <tr
+                    class="{% if not visitor.check_out_time %}active-visit{% endif %}"
+                >
+                    <td class="id-cell">#{{ visitor.id }}</td>
+                    <td class="username-cell">
+                        <div class="user-info">
+                            <span class="username">{{ visitor.username }}</span>
+                        </div>
+                    </td>
+                    <td class="purpose-cell">{{ visitor.purpose }}</td>
+                    <td class="time-cell">
+                        <div class="datetime">
+                            <span class="date"
+                                >{{ visitor.check_in_time.split(' ')[0] }}</span
+                            >
+                            <span class="time"
+                                >{{ visitor.check_in_time.split(' ')[1] }}</span
+                            >
+                        </div>
+                    </td>
+                    <td class="time-cell">
+                        {% if visitor.check_out_time %}
+                        <div class="datetime">
+                            <span class="date"
+                                >{{ visitor.check_out_time.split(' ')[0]
+                                }}</span
+                            >
+                            <span class="time"
+                                >{{ visitor.check_out_time.split(' ')[1]
+                                }}</span
+                            >
+                        </div>
+                        {% else %}
+                        <span class="status-text pending"
+                            >Still checked in</span
+                        >
+                        {% endif %}
+                    </td>
+                    <td class="status-cell">
+                        {% if visitor.check_out_time %}
+                        <span class="status-badge completed">Completed</span>
+                        {% else %}
+                        <span class="status-badge active">Active</span>
+                        {% endif %}
+                    </td>
+                    <td class="duration-cell">
+                        {% if visitor.check_out_time %}
+                        <span class="duration"
+                            >{{ calculate_duration(visitor.check_in_time,
+                            visitor.check_out_time) }}</span
+                        >
+                        {% else %}
+                        <span class="duration ongoing">Ongoing</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% else %}
+                <tr class="empty-row">
+                    <td colspan="8" class="empty-message">
+                        <div class="empty-state">
+                            <span class="empty-icon">📋</span>
+                            <p>No visitor records found</p>
+                            <small>Visitor check-ins will appear here</small>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    .visitor-log-container {
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .page-header {
+        margin-bottom: 30px;
+    }
+
+    .page-header h1 {
+        color: #2c3e50;
+        margin-bottom: 5px;
+        font-size: 2rem;
+    }
+
+    .subtitle {
+        color: #7f8c8d;
+        margin: 0;
+        font-size: 1rem;
+    }
+
+    .alerts {
+        margin-bottom: 20px;
+    }
+
+    .alert {
+        padding: 12px 16px;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        border-left: 4px solid #3498db;
+    }
+
+    .alert-info {
+        background-color: #ebf3fd;
+        color: #2980b9;
+    }
+
+    .table-controls {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        gap: 20px;
+    }
+
+    .search-box {
+        position: relative;
+        flex: 1;
+        max-width: 300px;
+    }
+
+    .search-box input {
+        width: 100%;
+        padding: 12px 16px 12px 45px;
+        border: 2px solid #e1e8ed;
+        border-radius: 25px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+    }
+
+    .search-box input:focus {
+        outline: none;
+        border-color: #5d8aa8;
+        box-shadow: 0 0 0 3px rgba(93, 138, 168, 0.1);
+    }
+
+    .search-icon {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #95a5a6;
+    }
+
+    .table-stats {
+        display: flex;
+        gap: 15px;
+    }
+
+    .stat-badge {
+        background: #f8f9fa;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 14px;
+        color: #495057;
+        border: 1px solid #e9ecef;
+    }
+
+    .stat-badge.active-visitors {
+        background: #e8f5e8;
+        color: #2d5016;
+        border-color: #c3e6c3;
+    }
+
+    .table-wrapper {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        overflow: hidden;
+    }
+
+    .visitor-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+    }
+
+    .visitor-table th {
+        background: linear-gradient(135deg, #5d8aa8 0%, #4a7591 100%);
+        color: white;
+        padding: 16px 12px;
+        text-align: left;
+        font-weight: 600;
+        cursor: pointer;
+        position: relative;
+        user-select: none;
+    }
+
+    .visitor-table th:hover {
+        background: linear-gradient(135deg, #4a7591 0%, #3d627a 100%);
+    }
+
+    .sort-icon {
+        font-size: 12px;
+        margin-left: 5px;
+        opacity: 0.7;
+    }
+
+    .visitor-table td {
+        padding: 14px 12px;
+        border-bottom: 1px solid #f1f3f4;
+        vertical-align: middle;
+    }
+
+    .visitor-table tbody tr:hover {
+        background-color: #f8f9fa;
+    }
+
+    .visitor-table tbody tr.active-visit {
+        background-color: #fff3cd;
+        border-left: 4px solid #ffc107;
+    }
+
+    .visitor-table tbody tr.active-visit:hover {
+        background-color: #fff3cd;
+    }
+
+    .id-cell {
+        font-weight: 600;
+        color: #6c757d;
+        font-family: monospace;
+    }
+
+    .user-info {
+        display: flex;
+        align-items: center;
+    }
+
+    .username {
+        font-weight: 500;
+        color: #2c3e50;
+    }
+
+    .purpose-cell {
+        max-width: 200px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .datetime {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .date {
+        font-weight: 500;
+        color: #2c3e50;
+    }
+
+    .time {
+        font-size: 12px;
+        color: #7f8c8d;
+    }
+
+    .status-badge {
+        padding: 4px 12px;
+        border-radius: 15px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .status-badge.active {
+        background: #d4edda;
+        color: #155724;
+    }
+
+    .status-badge.completed {
+        background: #cce5ff;
+        color: #004085;
+    }
+
+    .status-text.pending {
+        color: #856404;
+        font-style: italic;
+        font-size: 13px;
+    }
+
+    .duration {
+        font-weight: 500;
+        color: #495057;
+    }
+
+    .duration.ongoing {
+        color: #28a745;
+        font-style: italic;
+    }
+
+    .action-btn {
+        padding: 6px 12px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 12px;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .checkout-btn {
+        background: #ffc107;
+        color: #212529;
+    }
+
+    .checkout-btn:hover {
+        background: #e0a800;
+        transform: translateY(-1px);
+    }
+
+    .completed-text {
+        color: #6c757d;
+        font-style: italic;
+        font-size: 12px;
+    }
+
+    .empty-row .empty-message {
+        text-align: center;
+        padding: 60px 20px;
+    }
+
+    .empty-state {
+        color: #6c757d;
+    }
+
+    .empty-icon {
+        font-size: 48px;
+        display: block;
+        margin-bottom: 15px;
+    }
+
+    .empty-state p {
+        font-size: 18px;
+        margin: 10px 0 5px;
+        color: #495057;
+    }
+
+    .empty-state small {
+        color: #6c757d;
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+        .table-controls {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .search-box {
+            max-width: none;
+        }
+
+        .table-stats {
+            justify-content: center;
+        }
+
+        .visitor-table {
+            font-size: 12px;
+        }
+
+        .visitor-table th,
+        .visitor-table td {
+            padding: 8px 6px;
+        }
+    }
+</style>
+
+<script>
+    function filterTable() {
+        const input = document.getElementById("searchInput");
+        const filter = input.value.toLowerCase();
+        const table = document.getElementById("visitorTable");
+        const rows = table.getElementsByTagName("tr");
+        let visibleCount = 0;
+
+        for (let i = 1; i < rows.length; i++) {
+            const row = rows[i];
+            const cells = row.getElementsByTagName("td");
+            let found = false;
+
+            for (let j = 0; j < cells.length - 1; j++) {
+                const cellText = cells[j].textContent.toLowerCase();
+                if (cellText.includes(filter)) {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (found) {
+                row.style.display = "";
+                visibleCount++;
+            } else {
+                row.style.display = "none";
+            }
+        }
+
+        document.getElementById("totalRecords").textContent = visibleCount;
+    }
+
+    function sortTable(columnIndex) {
+        const table = document.getElementById("visitorTable");
+        const tbody = table.getElementsByTagName("tbody")[0];
+        const rows = Array.from(tbody.getElementsByTagName("tr"));
+
+        rows.sort((a, b) => {
+            const aVal = a
+                .getElementsByTagName("td")
+                [columnIndex].textContent.trim();
+            const bVal = b
+                .getElementsByTagName("td")
+                [columnIndex].textContent.trim();
+
+            if (!isNaN(aVal) && !isNaN(bVal)) {
+                return parseFloat(aVal) - parseFloat(bVal);
+            }
+
+            return aVal.localeCompare(bVal);
+        });
+
+        rows.forEach((row) => tbody.appendChild(row));
+    }
+</script>
+{% endblock %}

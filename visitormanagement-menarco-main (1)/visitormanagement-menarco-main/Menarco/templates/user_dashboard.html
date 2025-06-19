@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>User Dashboard - Menarco</title>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                font-family: "Poppins", sans-serif;
+                background: linear-gradient(135deg, #639399 0%, #764ba2 100%);
+                min-height: 100vh;
+                padding: 20px;
+            }
+
+            .dashboard-container {
+                max-width: 900px;
+                margin: 0 auto;
+            }
+
+            .header-card {
+                background: white;
+                padding: 30px;
+                border-radius: 20px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+                margin-bottom: 25px;
+                text-align: center;
+                position: relative;
+                overflow: hidden;
+            }
+
+            .header-card::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 5px;
+                background: linear-gradient(90deg, #667eea, #764ba2);
+            }
+
+            .welcome-title {
+                font-size: 2.2rem;
+                font-weight: 600;
+                color: #2c3e50;
+                margin-bottom: 10px;
+            }
+
+            .welcome-subtitle {
+                color: #7f8c8d;
+                font-size: 1.1rem;
+                font-weight: 300;
+            }
+
+            .main-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 25px;
+                margin-bottom: 25px;
+            }
+
+            .card {
+                background: white;
+                border-radius: 20px;
+                padding: 30px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+                border: 1px solid rgba(255, 255, 255, 0.8);
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+            }
+
+            .card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+            }
+
+            .card-title {
+                font-size: 1.4rem;
+                font-weight: 600;
+                color: #2c3e50;
+                margin-bottom: 20px;
+                display: flex;
+                align-items: center;
+            }
+
+            .card-icon {
+                font-size: 1.5rem;
+                margin-right: 10px;
+            }
+
+            .form-group {
+                margin-bottom: 20px;
+            }
+
+            .form-label {
+                display: block;
+                font-weight: 500;
+                color: #34495e;
+                margin-bottom: 8px;
+                font-size: 0.95rem;
+            }
+
+            .form-control {
+                width: 100%;
+                padding: 15px;
+                border: 2px solid #e1e8ed;
+                border-radius: 12px;
+                font-size: 1rem;
+                font-family: "Poppins", sans-serif;
+                transition: all 0.3s ease;
+                background: #f8f9fa;
+            }
+
+            .form-control:focus {
+                outline: none;
+                border-color: #667eea;
+                background: white;
+                box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            }
+
+            .btn-primary {
+                width: 100%;
+                padding: 15px;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                border: none;
+                border-radius: 12px;
+                font-size: 1rem;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            }
+
+            .btn-primary:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            }
+
+            .btn-primary:active {
+                transform: translateY(0);
+            }
+
+            .alert {
+                padding: 15px 20px;
+                border-radius: 12px;
+                margin-bottom: 20px;
+                font-weight: 500;
+            }
+
+            .alert-success {
+                border-left: 4px solid #27ae60;
+                background: linear-gradient(135deg, #d5f4e6 0%, #feffff 100%);
+                color: #2d5016;
+            }
+
+            .alert-error {
+                border-left: 4px solid #e74c3c;
+                background: linear-gradient(135deg, #fadbd8 0%, #feffff 100%);
+                color: #721c24;
+            }
+
+            .history-card {
+                grid-column: span 2;
+            }
+
+            .table-container {
+                overflow-x: auto;
+                border-radius: 12px;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            }
+
+            .modern-table {
+                width: 100%;
+                border-collapse: collapse;
+                background: white;
+                border-radius: 12px;
+                overflow: hidden;
+            }
+
+            .modern-table th {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                padding: 18px 15px;
+                text-align: left;
+                font-weight: 600;
+                font-size: 0.9rem;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+
+            .modern-table td {
+                padding: 18px 15px;
+                border-bottom: 1px solid #f1f3f4;
+                color: #2c3e50;
+                font-weight: 400;
+            }
+
+            .modern-table tbody tr:hover {
+                background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            }
+
+            .modern-table tbody tr:last-child td {
+                border-bottom: none;
+            }
+
+            .status-badge {
+                padding: 6px 12px;
+                border-radius: 20px;
+                font-size: 0.8rem;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+
+            .status-active {
+                background: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%);
+                color: #2d3436;
+            }
+
+            .status-completed {
+                background: linear-gradient(135deg, #81ecec 0%, #74b9ff 100%);
+                color: #2d3436;
+            }
+
+            .empty-state {
+                text-align: center;
+                padding: 60px 20px;
+                color: #7f8c8d;
+            }
+
+            .empty-icon {
+                font-size: 4rem;
+                margin-bottom: 20px;
+                opacity: 0.5;
+            }
+
+            .empty-text {
+                font-size: 1.2rem;
+                font-weight: 500;
+                margin-bottom: 10px;
+            }
+
+            .empty-subtext {
+                font-size: 1rem;
+                opacity: 0.7;
+            }
+
+            .logout-section {
+                text-align: center;
+                margin-top: 30px;
+            }
+
+            .btn-logout {
+                display: inline-flex;
+                align-items: center;
+                padding: 12px 24px;
+                background: linear-gradient(135deg, #fab1a0 0%, #e17055 100%);
+                color: white;
+                text-decoration: none;
+                border-radius: 12px;
+                font-weight: 500;
+                transition: all 0.3s ease;
+                box-shadow: 0 4px 15px rgba(225, 112, 85, 0.3);
+            }
+
+            .btn-logout:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 25px rgba(225, 112, 85, 0.4);
+            }
+
+            .logout-icon {
+                margin-right: 8px;
+                font-size: 1.1rem;
+            }
+
+            /* Responsive Design */
+            @media (max-width: 768px) {
+                .main-grid {
+                    grid-template-columns: 1fr;
+                }
+
+                .history-card {
+                    grid-column: span 1;
+                }
+
+                .welcome-title {
+                    font-size: 1.8rem;
+                }
+
+                .card {
+                    padding: 20px;
+                }
+
+                .modern-table th,
+                .modern-table td {
+                    padding: 12px 10px;
+                    font-size: 0.9rem;
+                }
+            }
+
+            @media (max-width: 480px) {
+                body {
+                    padding: 10px;
+                }
+
+                .header-card,
+                .card {
+                    padding: 20px;
+                }
+
+                .welcome-title {
+                    font-size: 1.6rem;
+                }
+
+                .modern-table {
+                    font-size: 0.8rem;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="dashboard-container">
+            <div class="header-card">
+                <h1 class="welcome-title">Welcome back, {{ username }}! 👋</h1>
+                <p class="welcome-subtitle">
+                    Ready to check in for your visit today?
+                </p>
+            </div>
+
+            <div class="main-grid">
+                <div class="card">
+                    <h2 class="card-title">
+                        <span class="card-icon">📝</span>
+                        Quick Check-In
+                    </h2>
+
+                    {% with messages =
+                    get_flashed_messages(with_categories=true) %} {% if messages
+                    %} {% for category, message in messages %}
+                    <div
+                        class="alert alert-{{ 'success' if category == 'success' else 'error' }}"
+                    >
+                        {{ message }}
+                    </div>
+                    {% endfor %} {% endif %} {% endwith %}
+
+                    <form method="POST">
+                        <div class="form-group">
+                            <label for="purpose" class="form-label"
+                                >Purpose of Visit</label
+                            >
+                            <textarea
+                                id="purpose"
+                                name="purpose"
+                                class="form-control"
+                                rows="4"
+                                placeholder="Please describe the purpose of your visit..."
+                                required
+                            ></textarea>
+                        </div>
+                        <button type="submit" class="btn-primary">
+                            🚀 Check In Now
+                        </button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h2 class="card-title">
+                        <span class="card-icon">📊</span>
+                        Visit Statistics
+                    </h2>
+                    <div style="text-align: center; padding: 20px 0">
+                        <div style="margin-bottom: 20px">
+                            <div
+                                style="
+                                    font-size: 2.5rem;
+                                    font-weight: 700;
+                                    color: #667eea;
+                                "
+                            >
+                                {{ visits|length }}
+                            </div>
+                            <div style="color: #7f8c8d; font-weight: 500">
+                                Total Visits
+                            </div>
+                        </div>
+                        <div>
+                            <div
+                                style="
+                                    font-size: 2rem;
+                                    font-weight: 700;
+                                    color: #e17055;
+                                "
+                            >
+                                {{ visits|selectattr('3', 'none')|list|length }}
+                            </div>
+                            <div style="color: #7f8c8d; font-weight: 500">
+                                Active Sessions
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card history-card">
+                    <h2 class="card-title">
+                        <span class="card-icon">🕒</span>
+                        Visit History
+                    </h2>
+
+                    <div class="table-container">
+                        <table class="modern-table">
+                            <thead>
+                                <tr>
+                                    <th>Visit ID</th>
+                                    <th>Purpose</th>
+                                    <th>Check-In</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for visit in visits %}
+                                <tr>
+                                    <td><strong>#{{ visit[0] }}</strong></td>
+                                    <td>{{ visit[1] }}</td>
+                                    <td>{{ visit[2] }}</td>
+                                    <td>
+                                        {% if visit[3] %}
+                                        <span
+                                            class="status-badge status-completed"
+                                            >Completed</span
+                                        >
+                                        {% else %}
+                                        <span class="status-badge status-active"
+                                            >Active</span
+                                        >
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% else %}
+                                <tr>
+                                    <td colspan="4">
+                                        <div class="empty-state">
+                                            <div class="empty-icon">📅</div>
+                                            <div class="empty-text">
+                                                No visits yet
+                                            </div>
+                                            <div class="empty-subtext">
+                                                Your check-in history will
+                                                appear here
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="logout-section">
+                <a href="{{ url_for('logout') }}" class="btn-logout">
+                    <span class="logout-icon">🚪</span>
+                    Sign Out
+                </a>
+            </div>
+        </div>
+    </body>
+</html>

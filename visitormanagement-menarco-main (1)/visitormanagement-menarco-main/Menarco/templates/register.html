@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Menarco Development - Register</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      color: #333;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    .animated-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(93, 138, 168, 0.3)),
+                  url('/static/images/bg.jpg') no-repeat center center / cover;
+      z-index: -1;
+      animation: zoomPan 20s ease-in-out infinite;
+      background-size: 110%;
+    }
+
+    @keyframes zoomPan {
+      0% { transform: scale(1) translate(0, 0); }
+      50% { transform: scale(1.05) translate(-1%, -1%); }
+      100% { transform: scale(1) translate(0, 0); }
+    }
+
+    header {
+      background-color: #639399;
+      padding: 10px 25px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      z-index: 1;
+    }
+
+    .logo img {
+      height: 30px;
+      vertical-align: middle;
+    }
+
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 400;
+      margin-left: 15px;
+      padding: 6px 12px;
+      border: 1px solid transparent;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+      font-size: 0.7rem;
+    }
+
+    nav a:hover {
+      background-color: #fff;
+      color: #5d8aa8;
+      border-color: #fff;
+    }
+
+    .register-section {
+      flex-grow: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 60px 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .register-container {
+      background: white;
+      padding: 40px 30px;
+      border-radius: 15px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+      max-width: 450px;
+      width: 100%;
+      text-align: center;
+      animation: fadeIn 1.2s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .subtext {
+      font-size: 0.95rem;
+      color: #555;
+      margin-bottom: 15px;
+    }
+
+    .register-container h2  {
+      font-size: 1.8rem;
+      color: #639399;
+      font-weight: 700;
+      margin-bottom: 15px;
+    }
+
+    .register-container form input {
+      width: 100%;
+      padding: 12px 15px;
+      margin: 15px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+      background-color: #F9F7F4;
+      color: #333;
+      transition: border-color 0.3s ease, background-color 0.3s ease;
+    }
+
+    .register-container form input:focus {
+      border-color: #639399;
+      background-color: #eaf4f6;
+      outline: none;
+    }
+
+    .register-container form button {
+      width: 100%;
+      padding: 14px;
+      margin-top: 20px;
+      background-color: #639399;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .register-container form button:hover {
+      background-color: #577d84;
+    }
+
+    .login-button {
+      display: inline-block;
+      margin-top: 15px;
+      color: #639399;
+      text-decoration: underline;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .login-button:hover {
+      text-decoration: none;
+    }
+
+    .error {
+      color: #d33;
+      font-size: 0.9rem;
+      margin-bottom: 15px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 15px 20px;
+      font-size: 0.9rem;
+      color: #777;
+      background-color: #f9f9f9;
+      box-shadow: inset 0 1px 0 rgba(0,0,0,0.05);
+      z-index: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="animated-bg"></div>
+
+  <header>
+    <div class="logo">
+      <img src="/static/images/logo.png" alt="Menarco Logo">
+    </div>
+    <nav>
+      <a href="/">Home</a>
+    </nav>
+  </header>
+
+  <section class="register-section">
+    <div class="register-container">
+      <h2>Create a Visitor Account? </h2>
+      <p class="subtext">
+        You're just a few clicks away from unlocking your visitor access—let's make it official
+      </p>
+      
+
+      {% if error %}
+        <p class="error">{{ error }}</p>
+      {% endif %}
+
+      <form method="POST" action="{{ url_for('register') }}">
+        <input type="text" name="name" placeholder="Full Name" required />
+        <input type="text" name="username" placeholder="Username" required />
+        <input type="text" name="contact" placeholder="Contact Number" required />
+        <input type="text" name="address" placeholder="Address" required />
+        <input type="password" name="password" placeholder="Password" required />
+        <input type="password" name="confirm_password" placeholder="Confirm Password" required />
+        <button type="submit">Register</button>
+      </form>
+
+      <a class="login-button" href="{{ url_for('login') }}">Back to Login</a>
+    </div>
+  </section>
+
+  <footer>
+    &copy; 2025 Menarco Development. All rights reserved.
+  </footer>
+
+</body>
+</html>
